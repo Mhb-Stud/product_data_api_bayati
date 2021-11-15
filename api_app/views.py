@@ -31,9 +31,10 @@ class TestView(APIView):
         deserialized = PersonSerializer(data=request.data)
         if deserialized.is_valid():
             deserialized.save()
+            return Response(deserialized.data)
         else:
-            print('incorrect format')
-        return Response(deserialized.data)
+            return Response(deserialized.errors)
+
 
 
 
