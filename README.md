@@ -1,1 +1,1 @@
-/* an api for processing product information 
+an api for processing product information 
