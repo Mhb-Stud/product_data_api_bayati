@@ -16,10 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api_app.views import TestView
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register('', TestView, basename='create')
+urlpatterns = router.urls
+
 
 # these are two endpoints to access the api
-urlpatterns = [
-    # path('admin/', admin.site.urls),
-    path('get/', TestView.as_view()),
-    path('post/', TestView.as_view()),
-]
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('get/', TestView.as_view()),
+#     path('post/', TestView.as_view()),
+# ]
