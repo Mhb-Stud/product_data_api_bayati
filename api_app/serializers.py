@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person
+from .models import Product
 
 # serializers are responsible for converting query sets and complex database types into json
 # and simple python types your serializer should inherit from ModelSerializer from rest_framework
@@ -8,9 +8,9 @@ from .models import Person
 # and convert python types into complex data types and write to database
 
 
-class PersonSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Person
+        model = Product
         fields = '__all__'
 
 

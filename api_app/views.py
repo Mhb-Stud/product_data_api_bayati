@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import PersonSerializer
-from .models import Person
+from .serializers import ProductSerializer
+from .models import Product
 from rest_framework import viewsets
 
 # for handling the request with a class based view your class should inherit from APIView
@@ -18,8 +18,8 @@ class TestView(viewsets.ViewSet):
     # the data is in jason format now we can return the data with response method
 
     def list(self, request):
-        data = Person.objects.all()
-        serialized = PersonSerializer(data, many=True)
+        data = Product.objects.all()
+        serialized = ProductSerializer(data, many=True)
         return Response(serialized.data)
 
     # for the post method we take the request knowing that it's a post request
@@ -28,7 +28,7 @@ class TestView(viewsets.ViewSet):
     # the data received is valid and in the correct format with is valid after we are
     # sure we can write to database with save
     def create(self, request):
-        deserialized = PersonSerializer(data=request.data)
+        deserialized = ProductSerializer(data=request.data)
         if deserialized.is_valid():
             deserialized.save()
             return Response(deserialized.data)
