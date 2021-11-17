@@ -6,5 +6,5 @@ from django.db import models
 class Product(models.Model):
     product_id = models.IntegerField()
     product_title = models.TextField()
-    product_price = models.TextField()
+    product_price = models.IntegerField()
     price_before_discount = models.IntegerField()
