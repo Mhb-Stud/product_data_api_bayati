@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config as envir
+
+
+# Initialise environment variables
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k&$7^*me5&6z(33ed%&e12av=7e54_ku2rmz41v^2xnyy!ogx5'
+SECRET_KEY = envir('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api_app',
+    'gateway',
     'rest_framework',
 ]
 
@@ -84,9 +88,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'product_database',
-        'USER': '',
-        'PASSWORD': '',
+        'NAME': envir('DATABASE_NAME'),
+        'USER': envir('DATABASE_USER'),
+        'PASSWORD': envir('DATABASE_PASS'),
         'HOST': 'localhost',
         'POST': '',
     }
