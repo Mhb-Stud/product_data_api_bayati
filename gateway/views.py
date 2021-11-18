@@ -11,7 +11,7 @@ from rest_framework import viewsets
  for handling the request with a class based view your class should inherit from APIView
  and you should define the get and post method inside your class
 """
-class TestView(viewsets.ViewSet):
+class Handler(viewsets.ViewSet):
 
     """
      in the get method it takes the request as a parameter knowing that it's a get request

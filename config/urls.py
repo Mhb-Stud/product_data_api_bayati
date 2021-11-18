@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from gateway.views import TestView
+from gateway.views import Handler
 from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register('', TestView, basename='create')
+router.register('', Handler, basename='create')
 urlpatterns = router.urls
 
 
