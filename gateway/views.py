@@ -32,7 +32,7 @@ class Handler(viewsets.ViewSet):
      sure we can write to database with save
      """
     def create(self, request):
-        deserialized = ProductSerializer(data=request.data)
+        deserialized = ProductSerializer(data=request.data, many=True)
         if deserialized.is_valid():
             deserialized.save()
             return Response(deserialized.data)
