@@ -7,6 +7,31 @@ from django.db import models
 """
 class Product(models.Model):
     id = models.IntegerField(primary_key=True)
-    title = models.TextField()
-    price = models.IntegerField()
-    base_price = models.IntegerField()
+    title = models.CharField(max_length=50)
+    price = models.IntegerField(default=0)
+    base_price = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'Product'
+
+    def __str__(self):
+        return self.title
+
+class Vendor(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'Vendor'
+
+
+class ProductInstance:
+    id = models.IntegerField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'ProductInstance'
+
