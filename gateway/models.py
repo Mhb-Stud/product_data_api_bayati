@@ -26,6 +26,9 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'product'
+        indexes = [
+            models.Index(fields=['title'], name='title idx')
+        ]
 
     def __str__(self):
         return self.title

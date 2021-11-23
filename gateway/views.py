@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ProductSerializer
-from .models import Product
+from .models import *
 from rest_framework import viewsets
 
 
@@ -32,17 +32,26 @@ class Handler(viewsets.ViewSet):
      sure we can write to database with save
      """
     def create(self, request):
-        deserialized = ProductSerializer(data=request.data)
-        if deserialized.is_valid():
-            deserialized.save()
-            return Response(deserialized.data)
+        if DatabaseInterface.should_add_vendor(request.data):
+            ven = Vendor(request.data['vendor'])
+            ven.save()
+        # else:
+        #     ven = Vendor.objects.get(name=request.data['vendor'])
+
+        serialized = ProductSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data)
         else:
-            return Response(deserialized.errors)
+            return Response(serialized.errors)
 
+class DatabaseInterface:
+    is_available = None
 
-
-
-
-
-
-
+    @classmethod
+    def should_add_vendor(cls, data):
+        cls.is_available = Vendor.objects.filter(name=data['vendor'])
+        if cls.is_available.__sizeof__() == 0:
+            return True
+        else:
+            return False
