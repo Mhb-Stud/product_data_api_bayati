@@ -12,7 +12,7 @@ class Product(models.Model):
     base_price = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'Product'
+        db_table = 'product'
 
     def __str__(self):
         return self.title
@@ -24,7 +24,7 @@ class Vendor(models.Model):
     password = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'Vendor'
+        db_table = 'vendor'
 
 
 class ProductInstance:
@@ -33,5 +33,5 @@ class ProductInstance:
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'ProductInstance'
+        db_table = 'product_instance'
 
