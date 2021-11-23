@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product
+from .models import *
 
 
 """
@@ -13,3 +13,8 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'price', 'base_price', 'vendor']
+
+class VendorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = ['name']

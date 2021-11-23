@@ -51,7 +51,7 @@ class DatabaseInterface:
     @classmethod
     def should_add_vendor(cls, data):
         cls.is_available = Vendor.objects.filter(name=data['vendor'])
-        if cls.is_available.__sizeof__() == 0:
+        if cls.is_available.count() == 0:
             return True
         else:
             return False
