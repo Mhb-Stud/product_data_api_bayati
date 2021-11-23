@@ -2,8 +2,7 @@ from django.db import models
 
 
 class Vendor(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, primary_key=True)
 
     class Meta:
         db_table = 'vendor'
@@ -23,7 +22,7 @@ class Product(models.Model):
     title = models.CharField(max_length=50)
     price = models.IntegerField(default=0)
     base_price = models.IntegerField(default=0)
-    vendor = models.ForeignKey(Vendor, max_length=50)
+    vendor = models.ForeignKey(Vendor, max_length=50, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'product'
