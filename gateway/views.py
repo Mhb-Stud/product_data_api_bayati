@@ -11,11 +11,7 @@ from rest_framework import viewsets
  for handling the request with a class based view your class should inherit from APIView
  and you should define the get and post method inside your class
 """
-class Handler(viewsets.ViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    authentication_classes = ['TokenAuthentication']
-    permission_classes = ['IsAuthenticated']
+class CrawlerHandler(viewsets.ViewSet):
     """
      in the get method it takes the request as a parameter knowing that it's a get request
      after that we get all person table rows with .object.all() method and into object format
@@ -58,3 +54,15 @@ class DatabaseInterface:
             return True
         else:
             return False
+
+
+class UserHandler(viewsets.ViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = ['TokenAuthentication']
+    permission_classes = ['IsAuthenticated']
+
+    def list(self, request):
+        data = Product.objects.filter(vendor=request.user.username)
+        serialized = ProductSerializer(data, many=True)
+        return Response(serialized.data)

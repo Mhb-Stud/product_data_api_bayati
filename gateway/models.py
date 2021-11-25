@@ -2,20 +2,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class Vendor(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
-
-    class Meta:
-        db_table = 'vendor'
-
-
 class User(AbstractUser):
     username = models.CharField(primary_key=True, max_length=50)
     password = models.TextField()
     email = models.TextField()
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    vendor = models.OneToOneField(Vendor, on_delete=models.CASCADE)
+
+class Vendor(models.Model):
+    name = models.CharField(max_length=50, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
+
+    class Meta:
+        db_table = 'vendor'
 
     """ 
      for creating models your model class in this case person should inherit
