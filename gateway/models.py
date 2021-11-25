@@ -11,7 +11,7 @@ class User(AbstractUser):
 
 class Vendor(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field=['username'])
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field='username')
 
     class Meta:
         db_table = 'vendor'
@@ -25,7 +25,7 @@ class Product(models.Model):
     title = models.CharField(max_length=50)
     price = models.IntegerField(default=0)
     base_price = models.IntegerField(default=0)
-    vendor = models.ForeignKey(Vendor, max_length=50, on_delete=models.CASCADE, to_field=['name'])
+    vendor = models.ForeignKey(Vendor, max_length=50, on_delete=models.CASCADE, to_field='name')
 
     class Meta:
         db_table = 'product'
