@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ProductSerializer
+from .serializers import *
 from .models import *
 from rest_framework import viewsets
 
@@ -12,7 +12,10 @@ from rest_framework import viewsets
  and you should define the get and post method inside your class
 """
 class Handler(viewsets.ViewSet):
-
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = ['TokenAuthentication']
+    permission_classes = ['IsAuthenticated']
     """
      in the get method it takes the request as a parameter knowing that it's a get request
      after that we get all person table rows with .object.all() method and into object format

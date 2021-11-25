@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class Vendor(models.Model):
@@ -8,10 +9,13 @@ class Vendor(models.Model):
         db_table = 'vendor'
 
 
-class User(models.Model):
+class User(AbstractUser):
     username = models.CharField(primary_key=True, max_length=50)
     password = models.TextField()
-    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    email = models.TextField()
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    vendor = models.OneToOneField(Vendor, on_delete=models.CASCADE)
 
     """ 
      for creating models your model class in this case person should inherit

@@ -15,19 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from gateway.views import Handler
-from rest_framework.routers import DefaultRouter
+from .routers import router
+from gateway import views
 
 
-router = DefaultRouter()
-# router.register('', Handler, basename='create')
-router.register('auth/', Handler, include('dj_rest_auth.urls'))
-urlpatterns = router.urls
-
-
-# these are two endpoints to access the api
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('get/', TestView.as_view()),
-#     path('post/', TestView.as_view()),
-# ]
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('auth/', include('dj_rest_auth.urls')),
+    path('auth/registration/', include('dj_rest_auth.registration.urls'))
+]
