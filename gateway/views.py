@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .serializers import *
 from .models import *
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 """ 
@@ -59,10 +61,11 @@ class DatabaseInterface:
 class UserHandler(viewsets.ViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = ['TokenAuthentication']
-    permission_classes = ['IsAuthenticated']
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
-        data = Product.objects.filter(vendor=request.user.username)
-        serialized = ProductSerializer(data, many=True)
-        return Response(serialized.data)
+        # data = Product.objects.filter(vendor=request.user.username)
+        # serialized = ProductSerializer(data, many=True)
+        data = {"hello": 1}
+        return Response(data)
