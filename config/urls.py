@@ -18,7 +18,13 @@ from django.urls import path, include
 from .routers import *
 from gateway import views
 
-
+"""
+I have changed url paths Added admin route for custom creation and deletion of models and overall access
+api path is for exchanging data with the crawler and receives crawler data
+user path is for an authenticated user to access to their product data
+auth path has two sub passes login logout that receive user data in json
+auth/registration path is for user registration 
+"""
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(crawl_router.urls)),

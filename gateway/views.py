@@ -15,10 +15,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 """
 class CrawlerHandler(viewsets.ViewSet):
     """
-     in the get method it takes the request as a parameter knowing that it's a get request
-     after that we get all person table rows with .object.all() method and into object format
-     now it's time to convert object format into json format for that we use serializer after
-     the data is in jason format now we can return the data with response method
+    we get the data with objects.all then we send it to serializer to change it from query set into json then we
+    send the data back as a response
     """
     def list(self, request):
         data = Product.objects.all()
@@ -26,12 +24,10 @@ class CrawlerHandler(viewsets.ViewSet):
         return Response(serialized.data)
 
     """ 
-    for the post method we take the request knowing that it's a post request
-     we use the serializer that we created for our Person model to convert json
-     data into object set with calling same method after that we should check if
-     the data received is valid and in the correct format with is valid after we are
-     sure we can write to database with save
-     """
+    ViewSet class automatically sends post requests to this function here i check weather a vendor sent in json of a 
+    product exists in the database if the vendor doesn't exist i add it to the database also we change product type
+    using serializer and we send the response back 
+    """
     def create(self, request):
         if DatabaseInterface.should_add_vendor(request.data):
             user = User.objects.filter(username=request.data['vendor'])
@@ -48,6 +44,12 @@ class CrawlerHandler(viewsets.ViewSet):
         else:
             return Response(serialized.errors)
 
+
+"""
+this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
+to that class and its related to our database
+"""
+
 class DatabaseInterface:
     is_available = None
 
@@ -60,6 +62,10 @@ class DatabaseInterface:
             return False
 
 
+"""
+this class is responsible to send back the user's products in the database knowing that their username is saved as a 
+vendor in the database
+"""
 class UserHandler(viewsets.ViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -75,6 +81,10 @@ class UserHandler(viewsets.ViewSet):
             return Response(serialized.errors)
 
 
+"""
+this is a generic class for handling user registration since we don't need to do anything special this class does the
+job for us it takes the user registration form by a post request and in json format sends the data to RegisterSerializer
+"""
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)

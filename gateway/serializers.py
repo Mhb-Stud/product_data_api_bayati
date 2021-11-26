@@ -17,17 +17,25 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'title', 'price', 'base_price', 'vendor']
 
+
+# just a serializer
 class VendorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vendor
         fields = ['name']
 
-
+# just a serializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password', 'vendor']
 
+
+"""
+this class is responsible for registering users and saving their model in the database
+it also checks weather a vendor with the same name exists if it exists it maps the user
+to the vendor with a oneToOne field
+"""
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             validators=[UniqueValidator(queryset=User.objects.all())]
