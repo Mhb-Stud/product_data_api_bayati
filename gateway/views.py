@@ -4,9 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 """ 
@@ -34,10 +34,12 @@ class CrawlerHandler(viewsets.ViewSet):
      """
     def create(self, request):
         if DatabaseInterface.should_add_vendor(request.data):
-            ven = Vendor(request.data['vendor'])
+            user = User.objects.filter(username=request.data['vendor'])
+            if user.count() == 0:
+                ven = Vendor(request.data['vendor'], user[0])
+            else:
+                ven = Vendor(request.data['vendor'])
             ven.save()
-        # else:
-        #     ven = Vendor.objects.get(name=request.data['vendor'])
 
         serialized = ProductSerializer(data=request.data)
         if serialized.is_valid():
@@ -65,7 +67,15 @@ class UserHandler(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
-        # data = Product.objects.filter(vendor=request.user.username)
-        # serialized = ProductSerializer(data, many=True)
-        data = {"hello": 1}
-        return Response(data)
+        data = Product.objects.filter(vendor=request.user.username)
+        serialized = ProductSerializer(data, many=True)
+        if serialized.is_valid():
+            return Response(serialized.data)
+        else:
+            return Response(serialized.errors)
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer

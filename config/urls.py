@@ -24,5 +24,5 @@ urlpatterns = [
     path('api/', include(crawl_router.urls)),
     path('user/', include(user_router.urls)),
     path('auth/', include('dj_rest_auth.urls')),
-    path('auth/registration/', include('dj_rest_auth.registration.urls'))
+    path('auth/registration/', RegisterView.as_view(), name='register')
 ]
