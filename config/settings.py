@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'user'
 ]
 SITE_ID = 1
 

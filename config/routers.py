@@ -1,4 +1,5 @@
 from gateway.views import *
+from user.views import *
 from rest_framework.routers import DefaultRouter
 
 
