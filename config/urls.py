@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .routers import *
-from gateway import views
+from user import urls as user_urls
 
 """
 I have changed url paths Added admin route for custom creation and deletion of models and overall access
@@ -28,7 +28,5 @@ auth/registration path is for user registration
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(crawl_router.urls)),
-    path('user/', include(user_router.urls)),
-    path('auth/', include('dj_rest_auth.urls')),
-    path('auth/registration/', RegisterView.as_view(), name='register')
+    path('user/', include(user_urls)),
 ]

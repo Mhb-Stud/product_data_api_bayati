@@ -9,11 +9,12 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
-""" 
- for handling the request with a class based view your class should inherit from APIView
- and you should define the get and post method inside your class
-"""
 class CrawlerHandler(viewsets.ViewSet):
+    """
+     for handling the request with a class based view your class should inherit from APIView
+     and you should define the get and post method inside your class
+    """
+
     """
     we get the data with objects.all then we send it to serializer to change it from query set into json then we
     send the data back as a response
@@ -62,27 +63,3 @@ class DatabaseInterface:
             return False
 
 
-"""
-this class is responsible to send back the user's products in the database knowing that their username is saved as a 
-vendor in the database
-"""
-class UserHandler(viewsets.ViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    authentication_classes = [TokenAuthentication, ]
-    permission_classes = [IsAuthenticated, ]
-
-    def list(self, request):
-        data = Product.objects.filter(vendor=request.user.username)
-        serialized = ProductSerializer(data, many=True)
-        return Response(serialized.data)
-
-
-"""
-this is a generic class for handling user registration since we don't need to do anything special this class does the
-job for us it takes the user registration form by a post request and in json format sends the data to RegisterSerializer
-"""
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
