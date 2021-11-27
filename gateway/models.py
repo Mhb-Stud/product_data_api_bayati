@@ -19,7 +19,7 @@ we can extend the user model and create two types of users
 """
 class Vendor(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field='username')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field='username', null=True)
 
     class Meta:
         db_table = 'vendor'

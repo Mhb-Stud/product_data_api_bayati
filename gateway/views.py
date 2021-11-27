@@ -31,7 +31,7 @@ class CrawlerHandler(viewsets.ViewSet):
     def create(self, request):
         if DatabaseInterface.should_add_vendor(request.data):
             user = User.objects.filter(username=request.data['vendor'])
-            if user.count() == 0:
+            if user.count() == 1:
                 ven = Vendor(request.data['vendor'], user[0])
             else:
                 ven = Vendor(request.data['vendor'])
@@ -75,10 +75,7 @@ class UserHandler(viewsets.ViewSet):
     def list(self, request):
         data = Product.objects.filter(vendor=request.user.username)
         serialized = ProductSerializer(data, many=True)
-        if serialized.is_valid():
-            return Response(serialized.data)
-        else:
-            return Response(serialized.errors)
+        return Response(serialized.data)
 
 
 """
