@@ -1,16 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-
-class User(AbstractUser):
-    """
-    this model holds user data and overrides django default user also changed settings.py for config
-    """
-    username = models.CharField(primary_key=True, max_length=50)
-    password = models.TextField()
-    email = models.EmailField(blank=True)
-    first_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50, blank=True)
+from user.models import User
 
 
 class Vendor(models.Model):
@@ -19,11 +8,24 @@ class Vendor(models.Model):
     and each vendor is a user although this model is created for now and later on if we wanted to have normal users
     we can extend the user model and create two types of users
     """
-    name = models.CharField(max_length=50, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field='username', null=True)
+    logo = models.ImageField(blank=True, null=True)
 
     class Meta:
         db_table = 'vendor'
+
+
+class Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+
+class Brand(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL)
 
 
 class Product(models.Model):
@@ -34,9 +36,9 @@ class Product(models.Model):
     """
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=50)
-    price = models.IntegerField(default=0)
-    base_price = models.IntegerField(default=0)
-    vendor = models.ForeignKey(Vendor, max_length=50, on_delete=models.CASCADE, to_field='name')
+    picture = models.ImageField(blank=True, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL)
 
     class Meta:
         db_table = 'product'
@@ -47,5 +49,15 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+
+class VendorProduct(models.Model):
+    id = models.AutoField(primary_key=True)
+    base_price = models.FloatField(default=0)
+    price = models.FloatField(default=0)
+    discount_percent = models.FloatField(default=0)
+    discount_price_difference = models.FloatField(default=0)
+    number_of_views = models.IntegerField(default=0)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL)
 
 
