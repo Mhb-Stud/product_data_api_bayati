@@ -50,6 +50,16 @@ class Product(models.Model):
         return self.title
 
 
+class ProductAttribute:
+    id = models.AutoField(primary_key=True)
+    title = models.CharField()
+    value = models.CharField()
+    product = models.ForeignKey(Product, on_delete=models.RESTRICT)
+
+    class Meta:
+        verbose_name_plural = ("Attributes",)
+
+
 class VendorProduct(models.Model):
     id = models.AutoField(primary_key=True)
     base_price = models.FloatField(default=0)
