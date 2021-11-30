@@ -5,6 +5,13 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
 
+class UserSerializer(serializers.ModelSerializer):
+    """just a serializer"""
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'vendor']
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     """
     this class is responsible for registering users and saving their model in the database
