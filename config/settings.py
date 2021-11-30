@@ -45,14 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gateway',
     'rest_framework',
-    'dj_rest_auth',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
-    'rest_framework.authtoken',
-    'user'
+    'user',
+    'rest_framework_simplejwt',
+    'shop',
 ]
 SITE_ID = 1
 

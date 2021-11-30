@@ -4,7 +4,7 @@ from .serializers import *
 from gateway.serializers import *
 from .models import *
 from rest_framework import viewsets, generics
-from rest_framework.authentication import TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class UserHandler(viewsets.ViewSet):
@@ -14,7 +14,7 @@ class UserHandler(viewsets.ViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = [TokenAuthentication, ]
+    authentication_classes = [JWTAuthentication, ]
     permission_classes = [IsAuthenticated, ]
 
     def list(self, request):

@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
-from .models import *
+from shop.models import *
 from rest_framework import viewsets, generics
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -30,13 +30,13 @@ class CrawlerHandler(viewsets.ViewSet):
     using serializer and we send the response back 
     """
     def create(self, request):
-        if DatabaseInterface.should_add_vendor(request.data):
-            user = User.objects.filter(username=request.data['vendor'])
-            if user.count() == 1:
-                ven = Vendor(request.data['vendor'], user[0])
-            else:
-                ven = Vendor(request.data['vendor'])
-            ven.save()
+        # if DatabaseInterface.should_add_vendor(request.data):
+        #     user = User.objects.filter(username=request.data['vendor'])
+        #     if user.count() == 1:
+        #         ven = Vendor(request.data['vendor'], user[0])
+        #     else:
+        #         ven = Vendor(request.data['vendor'])
+        #     ven.save()
 
         serialized = ProductSerializer(data=request.data)
         if serialized.is_valid():

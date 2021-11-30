@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from shop.models import Product
 
 # added person model to admin panel for manual object creation but
 # disabled admin panel since this is an api
