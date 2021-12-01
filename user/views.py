@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from .serializers import *
-from gateway.serializers import *
+from shop.serializers import *
 from .models import *
 from rest_framework import viewsets, generics
 from rest_framework_simplejwt.authentication import JWTAuthentication

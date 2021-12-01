@@ -12,26 +12,20 @@ from shop.managers import *
 
 
 class CrawlerHandler(viewsets.ViewSet):
-    """
-     for handling the request with a class based view your class should inherit from APIView
+    """for handling the request with a class based view your class should inherit from APIView
      and you should define the get and post method inside your class
     """
 
-    """
-    we get the data with objects.all then we send it to serializer to change it from query set into json then we
-    send the data back as a response
-    """
     def list(self, request):
+        """we get the data with objects.all then we send it to serializer to change it from query set into json then we
+        send the data back as a response
+        """
         data = Product.objects.all()
         serialized = ProductSerializer(data, many=True)
         return Response(serialized.data)
 
-    """ 
-    ViewSet class automatically sends post requests to this function here i check weather a vendor sent in json of a 
-    product exists in the database if the vendor doesn't exist i add it to the database also we change product type
-    using serializer and we send the response back 
-    """
     def create(self, request):
+        """ViewSet class automatically sends post requests to this function here i redirect to managers.py"""
         # if DatabaseInterface.should_add_vendor(request.data):
         #     user = User.objects.filter(username=request.data['vendor'])
         #     if user.count() == 1:
@@ -39,17 +33,15 @@ class CrawlerHandler(viewsets.ViewSet):
         #     else:
         #         ven = Vendor(request.data['vendor'])
         #     ven.save()
-        CategoryManager.main(request.data)
-        serialized = ProductSerializer(data=request.data)
+        serialized = CategorySerializer(data=request.data)
         if serialized.is_valid():
-            serialized.save()
+            Category.objects.main(request.data)
             return Response(serialized.data)
         else:
             return Response(serialized.errors)
 
 
-"""
-this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
+"""this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
 to that class and its related to our database
 """
 
