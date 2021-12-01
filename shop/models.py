@@ -1,5 +1,6 @@
 from django.db import models
 from user.models import User
+from .managers import CategoryManager
 
 
 class Vendor(models.Model):
@@ -19,8 +20,13 @@ class Vendor(models.Model):
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
+    created_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=100)
+    super_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+    objects = CategoryManager()
 
+    class Meta:
+        ordering = ['-created_at']
 
 class Brand(models.Model):
     id = models.AutoField(primary_key=True)
@@ -37,8 +43,8 @@ class Product(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=50)
     picture = models.ImageField(blank=True, null=True)
-    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         db_table = 'product'
@@ -67,5 +73,5 @@ class VendorProduct(models.Model):
     discount_percent = models.FloatField(default=0)
     discount_price_difference = models.FloatField(default=0)
     number_of_views = models.IntegerField(default=0)
-    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)

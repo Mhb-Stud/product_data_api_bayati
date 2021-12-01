@@ -36,10 +36,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        corresponding_vendor = Vendor.objects.filter(name=validated_data['username'])
-        if corresponding_vendor.count() == 1:
-            corresponding_vendor[0].user = user
-            corresponding_vendor[0].save()
+        # corresponding_vendor = Vendor.objects.filter(name=validated_data['username'])
+        # if corresponding_vendor.count() == 1:
+        #     corresponding_vendor[0].user = user
+        #     corresponding_vendor[0].save()
         return user
 
     def validate(self, attrs):

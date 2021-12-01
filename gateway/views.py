@@ -8,6 +8,7 @@ from shop.serializers import *
 from rest_framework import viewsets, generics
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from shop.managers import *
 
 
 class CrawlerHandler(viewsets.ViewSet):
@@ -38,7 +39,7 @@ class CrawlerHandler(viewsets.ViewSet):
         #     else:
         #         ven = Vendor(request.data['vendor'])
         #     ven.save()
-
+        CategoryManager.main(request.data)
         serialized = ProductSerializer(data=request.data)
         if serialized.is_valid():
             serialized.save()
