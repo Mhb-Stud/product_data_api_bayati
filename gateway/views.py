@@ -6,7 +6,6 @@ from .serializers import *
 from shop.models import *
 from shop.serializers import *
 from rest_framework import viewsets, generics
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from shop.managers import *
 
@@ -34,7 +33,7 @@ class CrawlerHandler(viewsets.ViewSet):
         #         ven = Vendor(request.data['vendor'])
         #     ven.save()
         if 'vendor' is request.data:
-            Manager.process(request.data)
+            ProcessManager.process(request.data)
         else:
             serialized = CategorySerializer(data=request.data)
             if serialized.is_valid():
@@ -44,11 +43,10 @@ class CrawlerHandler(viewsets.ViewSet):
                 return Response(serialized.errors)
 
 
-"""this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
-to that class and its related to our database
-"""
-
 class DatabaseInterface:
+    """this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
+    to that class and its related to our database
+    """
     is_available = None
 
     @classmethod
