@@ -1,6 +1,6 @@
 from django.db import models
 from user.models import User
-from .managers import CategoryManager
+from .managers import *
 
 
 class Vendor(models.Model):
@@ -45,6 +45,7 @@ class Product(models.Model):
     picture = models.ImageField(blank=True, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    objects = ProductManager()
 
     class Meta:
         db_table = 'product'

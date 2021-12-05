@@ -33,12 +33,15 @@ class CrawlerHandler(viewsets.ViewSet):
         #     else:
         #         ven = Vendor(request.data['vendor'])
         #     ven.save()
-        serialized = CategorySerializer(data=request.data)
-        if serialized.is_valid():
-            Category.objects.main(request.data)
-            return Response(serialized.data)
+        if 'vendor' is request.data:
+            Manager.process(request.data)
         else:
-            return Response(serialized.errors)
+            serialized = CategorySerializer(data=request.data)
+            if serialized.is_valid():
+                Category.objects.process_category(request.data)
+                return Response(serialized.data)
+            else:
+                return Response(serialized.errors)
 
 
 """this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
