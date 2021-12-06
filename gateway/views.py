@@ -25,15 +25,8 @@ class CrawlerHandler(viewsets.ViewSet):
 
     def create(self, request):
         """ViewSet class automatically sends post requests to this function here i redirect to managers.py"""
-        # if DatabaseInterface.should_add_vendor(request.data):
-        #     user = User.objects.filter(username=request.data['vendor'])
-        #     if user.count() == 1:
-        #         ven = Vendor(request.data['vendor'], user[0])
-        #     else:
-        #         ven = Vendor(request.data['vendor'])
-        #     ven.save()
-        if 'vendor' is request.data:
-            ProcessManager.process(request.data)
+        if 'vendor' in request.data:
+            ProcessManager.process(data=request.data, self=ProcessManager())
         else:
             serialized = CategorySerializer(data=request.data)
             if serialized.is_valid():
@@ -43,18 +36,5 @@ class CrawlerHandler(viewsets.ViewSet):
                 return Response(serialized.errors)
 
 
-class DatabaseInterface:
-    """this class is created because i didn't want to write the function in the CrawlerHandler class because it is not related
-    to that class and its related to our database
-    """
-    is_available = None
-
-    @classmethod
-    def should_add_vendor(cls, data):
-        cls.is_available = Vendor.objects.filter(name=data['vendor'])
-        if cls.is_available.count() == 0:
-            return True
-        else:
-            return False
 
 

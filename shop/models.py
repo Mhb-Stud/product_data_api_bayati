@@ -21,7 +21,7 @@ class Vendor(models.Model):
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     super_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     objects = CategoryManager()
 
@@ -30,7 +30,7 @@ class Category(models.Model):
 
 class Brand(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
 
@@ -41,7 +41,7 @@ class Product(models.Model):
     it's vendor in the database
     """
     id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, unique=True)
     picture = models.ImageField(blank=True, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
