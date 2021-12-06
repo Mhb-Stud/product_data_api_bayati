@@ -61,23 +61,40 @@ class ProcessManager(models.Manager):
     def process(self, data):
         category = self.create_or_get_category(data['category_name'])
         brand = self.create_or_get_brand(data['brand'], category)
-        product = {
+        product_info = {
             'id': data['id'],
-            'title': data['title'],
+            'title': data['name'],
             'brand': brand,
             'category': category,
         }
-        ProductManager.objects.create_product(product)
-        self.create_or_get_vendor(data['vendor'])
+        product = ProcessManager.create_or_get_product(product_info)
+        vendor = self.create_or_get_vendor(data['vendor'])
+        ProcessManager.create_or_get_vendor_product(product, vendor, data)
 
     @staticmethod
     def create_or_get_brand(brand_name, brand_category):
-        return my_models.Brand.objects.get_or_create(name=brand_name, category=brand_category)
+        brand, created = my_models.Brand.objects.get_or_create(name=brand_name, category=brand_category)
+        return brand
 
     @staticmethod
     def create_or_get_category(category_name):
-        return my_models.Category.objects.make_or_get(category_name=category_name)
+        category, created = my_models.Category.objects.make_or_get(category_name=category_name)
+        return category
 
     @staticmethod
     def create_or_get_vendor(name):
-        my_models.Vendor.objects.get_or_create(name=name)
+        vendor, created = my_models.Vendor.objects.get_or_create(name=name)
+        return vendor
+
+    @staticmethod
+    def create_or_get_vendor_product(product, vendor, other_info):
+        default = {
+            'base_price': other_info['base_price'],
+            'price': other_info['price'],
+        }
+        my_models.VendorProduct.objects.get_or_create(product=product, vendor=vendor, defaults=default)
+
+    @staticmethod
+    def create_or_get_product(data):
+        product, created = my_models.Product.objects.get_or_create(id=data['id'], title=data['title'], brand=data['brand'], category=data['category'])
+        return product
