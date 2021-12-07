@@ -6,6 +6,7 @@ from .models import *
 from rest_framework import viewsets, generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from .models import User
 
 class UserHandler(viewsets.ViewSet):
     """
@@ -23,11 +24,10 @@ class UserHandler(viewsets.ViewSet):
         return Response(serialized.data)
 
 
-class RegisterView(generics.CreateAPIView):
+class RegisterView(viewsets.ViewSet):
+    """this class does the job for us it takes the user registration form by a post request and in json format sends the data to RegisterSerializer
     """
-    this is a generic class for handling user registration since we don't need to do anything special this class does the
-    job for us it takes the user registration form by a post request and in json format sends the data to RegisterSerializer
-    """
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+    def create(self, request):
+        new_user_data = request.data
+        User.objects.create_user(new_user_data['username'], new_user_data['email'], new_user_data['password'], new_user_data['password2'])
+        return Response(status=200)

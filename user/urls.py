@@ -5,11 +5,12 @@ from config.routers import *
 from .serializers import *
 from .views import *
 import config.urls
+from .routers import *
 
 
 urlpatterns = [
     path('data/', include(user_router.urls)),
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/registration/', RegisterView.as_view(), name='register')
+    path('auth/registration/', registration_router, name='register')
 ]

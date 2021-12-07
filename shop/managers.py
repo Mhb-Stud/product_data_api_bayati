@@ -71,8 +71,8 @@ class ProcessManager(models.Manager):
         vendor = self.create_or_get_vendor(data['vendor'])
         ProcessManager.create_or_get_vendor_product(product, vendor, data)
 
-    @staticmethod
-    def create_or_get_brand(brand_name, brand_category):
+    @classmethod
+    def create_or_get_brand(cls, brand_name, brand_category):
         brand, created = my_models.Brand.objects.get_or_create(name=brand_name, category=brand_category)
         return brand
 
@@ -81,9 +81,10 @@ class ProcessManager(models.Manager):
         category, created = my_models.Category.objects.make_or_get(category_name=category_name)
         return category
 
-    @staticmethod
-    def create_or_get_vendor(name):
+    @classmethod
+    def create_or_get_vendor(cls, name):
         vendor, created = my_models.Vendor.objects.get_or_create(name=name)
+        cls.map_vendor_to_existing_user(vendor)
         return vendor
 
     @staticmethod
@@ -98,3 +99,10 @@ class ProcessManager(models.Manager):
     def create_or_get_product(data):
         product, created = my_models.Product.objects.get_or_create(id=data['id'], title=data['title'], brand=data['brand'], category=data['category'])
         return product
+
+    @classmethod
+    def map_vendor_to_existing_user(cls, vendor):
+        users = User.objects.filter(username=vendor.name)
+        if users.count() == 1:
+            vendor.user = users[0]
+            vendor.save()

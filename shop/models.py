@@ -1,6 +1,10 @@
 from django.db import models
 from user.models import User
 from .managers import *
+from django.dispatch import receiver
+from django.db.models.signals import (
+    post_save
+)
 
 
 class Vendor(models.Model):
