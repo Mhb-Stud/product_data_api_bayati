@@ -29,5 +29,5 @@ class RegisterView(viewsets.ViewSet):
     """
     def create(self, request):
         new_user_data = request.data
-        User.objects.create_user(new_user_data['username'], new_user_data['email'], new_user_data['password'], new_user_data['password2'])
+        User.objects.create_user(username=new_user_data['username'], email=new_user_data['email'], password=new_user_data['password'], password2=new_user_data['password2'])
         return Response(status=200)

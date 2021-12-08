@@ -3,6 +3,7 @@ from django.db import models
 from rest_framework.response import Response
 import shop.models as my_models
 from shop.models import *
+from user.models import *
 
 
 class CategoryQuerySet(models.QuerySet):

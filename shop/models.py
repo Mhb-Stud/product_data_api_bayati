@@ -1,10 +1,10 @@
 from django.db import models
-from user.models import User
 from .managers import *
 from django.dispatch import receiver
 from django.db.models.signals import (
     post_save
 )
+from user.models import *
 
 
 class Vendor(models.Model):
@@ -20,6 +20,14 @@ class Vendor(models.Model):
 
     class Meta:
         db_table = 'vendor'
+
+
+@receiver(post_save, sender=User)
+def map_vendor_user(sender, instance, created, *args, **kwargs):
+    corresponding_vendor = Vendor.objects.filter(name=instance.username)
+    if corresponding_vendor.count() == 1:
+        corresponding_vendor[0].user = instance
+        corresponding_vendor[0].save()
 
 
 class Category(models.Model):
