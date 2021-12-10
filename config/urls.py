@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from .routers import *
 from user import urls as user_urls
+from shop.routers import *
 
 """
 I have changed url paths Added admin route for custom creation and deletion of models and overall access
@@ -29,4 +30,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(crawl_router.urls)),
     path('user/', include(user_urls)),
+    path('shop/', include(shop_router.urls)),
 ]
