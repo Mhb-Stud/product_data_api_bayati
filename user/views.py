@@ -19,8 +19,8 @@ class UserHandler(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
-        data = Product.objects.filter(vendor=request.user.username)
-        serialized = ProductSerializer(data, many=True)
+        data = VendorProduct.objects.filter(vendor__name=request.user.username)
+        serialized = VendorProductSerializer(data, many=True)
         return Response(serialized.data)
 
 

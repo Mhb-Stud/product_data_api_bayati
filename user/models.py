@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('Users must have an email address')
         if not username:
-            raise ValueError('Users must have a username address')
+            raise ValueError('Users must have a username')
         user = self.model(
             email=self.normalize_email(email),
             username=username,
@@ -27,7 +27,7 @@ class UserManager(BaseUserManager):
             last_name=last_name,
         )
         if password != password2:
-            raise ValueError('Passwords should Match!')
+            raise ValueError('Passwords did not Match!')
         else:
             user.set_password(password)
             user.save(using=self._db)
