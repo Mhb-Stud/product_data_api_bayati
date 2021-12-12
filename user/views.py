@@ -19,9 +19,11 @@ class UserHandler(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
-        data = VendorProduct.objects.values('product__id', 'base_price', 'price', 'discount_percent',
-                                            'discount_price_difference', 'number_of_views', 'product__title',
-                                            'product__brand__name', 'product__category__name').filter(vendor__name=request.user.username)
+        data = VendorProduct.objects.order_by('-number_of_views'
+                                              ).values('product__id',
+                                                       'base_price', 'price', 'discount_percent',
+                                                       'discount_price_difference', 'number_of_views', 'product__title',
+                                                       'product__brand__name', 'product__category__name').filter(vendor__name=request.user.username)
         return Response(data)
 
 
