@@ -58,6 +58,23 @@ class ProductManager(models.Manager):
     def create_product(self, data):
         return self.get_queryset().create_product(data)
 
+
+class VendorProductQuerySet(models.QuerySet):
+    pass
+
+
+class VendorProductManager(models.Manager):
+    def get_queryset(self):
+        return VendorProductQuerySet(self.model, using=self._db)
+
+    def get_vendor_products_by_view(self, username):
+        return self.get_queryset().order_by('-number_of_views'
+                                            ).values('product__id',
+                                                     'base_price', 'price', 'discount_percent',
+                                                     'discount_price_difference', 'number_of_views', 'product__title',
+                                                     'product__brand__name', 'product__category__name').filter(vendor__name=username)
+
+
 class ProcessManager(models.Manager):
     def process(self, data):
         category = self.create_or_get_category(data['category_name'])

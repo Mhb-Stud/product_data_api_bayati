@@ -14,3 +14,5 @@ urlpatterns = [
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/registration/', include(registration_router.urls), name='register')
 ]
+
+urlpatterns += photo_router.urls

@@ -7,8 +7,10 @@ from rest_framework import viewsets, generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import User
+from .tasks import download_vendor_photo
 
-class UserHandler(viewsets.ViewSet):
+
+class UserProductView(viewsets.ViewSet):
     """
     this class is responsible to send back the user's products in the database knowing that their username is saved as a
     vendor in the database
@@ -19,11 +21,7 @@ class UserHandler(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
-        data = VendorProduct.objects.order_by('-number_of_views'
-                                              ).values('product__id',
-                                                       'base_price', 'price', 'discount_percent',
-                                                       'discount_price_difference', 'number_of_views', 'product__title',
-                                                       'product__brand__name', 'product__category__name').filter(vendor__name=request.user.username)
+        data = VendorProduct.objects.get_vendor_products_by_view(request.user.username)
         return Response(data)
 
 
@@ -34,3 +32,13 @@ class RegisterView(viewsets.ViewSet):
         new_user_data = request.data
         User.objects.create_user(username=new_user_data['username'], email=new_user_data['email'], password=new_user_data['password'], password2=new_user_data['password2'])
         return Response(status=200)
+
+
+class PhotoUpload(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
+
+    def create(self, request):
+        download_vendor_photo.delay(request.data['image_url'], request.user.username)
+        return Response({"massage": 'the photo will be applied to your profile as soon as possible!'})
+

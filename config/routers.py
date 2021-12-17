@@ -9,4 +9,4 @@ crawl_router.register('', CrawlerHandler, basename='create')
 
 # this router is responsible for sending user/ path information to UserHandler Class
 user_router = DefaultRouter()
-user_router.register('', UserHandler, basename='review')
+user_router.register('', UserProductView, basename='review')

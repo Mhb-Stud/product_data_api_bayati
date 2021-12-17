@@ -16,10 +16,13 @@ class Vendor(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, to_field='username', null=True)
-    logo = models.ImageField(blank=True, null=True)
+    logo = models.ImageField(blank=True, null=True, upload_to='vendor/images')
 
     class Meta:
         db_table = 'vendor'
+        indexes = [
+            models.Index(fields=['name'], name='vendor name idx')
+        ]
 
 
 @receiver(post_save, sender=User)
@@ -38,6 +41,7 @@ class Category(models.Model):
     objects = CategoryManager()
 
     class Meta:
+        db_table = 'category'
         ordering = ['-created_at']
 
 class Brand(models.Model):
@@ -88,3 +92,7 @@ class VendorProduct(models.Model):
     number_of_views = models.IntegerField(default=0)
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    objects = VendorProductManager()
+
+    class Meta:
+        db_table = 'vendor_product'

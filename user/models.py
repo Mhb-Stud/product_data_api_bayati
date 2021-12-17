@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (
-    AbstractUser, BaseUserManager
+    AbstractUser, BaseUserManager, UserManager as UsM
 )
 from django.dispatch import receiver
 from django.db.models.signals import (
@@ -11,7 +11,7 @@ from django.db.models.signals import (
 class UserQuerySet(models.QuerySet):
     pass
 
-class UserManager(BaseUserManager):
+class UserManager(UsM):
     def get_queryset(self):
         return UserQuerySet(self.model, using=self._db)
 
