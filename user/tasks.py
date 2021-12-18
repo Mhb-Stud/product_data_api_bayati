@@ -6,7 +6,7 @@ import wget
 
 @shared_task
 def download_vendor_photo(photo_url, username):
-    response = wget.download(photo_url, out='media/vendor/images')
+    response = wget.download(photo_url, out='media/vendor/images'+username)
     try:
         my_object = Vendor.objects.get(name=username)
         my_object.logo = response

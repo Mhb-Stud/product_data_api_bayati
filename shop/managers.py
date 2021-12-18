@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import F
 from rest_framework.response import Response
 import shop.models as my_models
 from shop.models import *
@@ -11,7 +12,7 @@ class CategoryQuerySet(models.QuerySet):
         super_category = None
         try:
             super_category = self.get(name=name)
-        except ObjectDoesNotExist as ex:
+        except Category.DoesNotExist:
             print('crawler is buggy!')
 
         return super_category
@@ -74,20 +75,38 @@ class VendorProductManager(models.Manager):
                                                      'discount_price_difference', 'number_of_views', 'product__title',
                                                      'product__brand__name', 'product__category__name').filter(vendor__name=username)
 
+    def get_vendor_products_with_detail(self):
+        return self.get_queryset().values('product__id',
+                                          'base_price', 'price', 'discount_percent',
+                                          'discount_price_difference', 'number_of_views', 'product__title',
+                                          'product__brand__name', 'product__category__name')
 
-class ProcessManager(models.Manager):
-    def process(self, data):
-        category = self.create_or_get_category(data['category_name'])
-        brand = self.create_or_get_brand(data['brand'], category)
+    def increment_vendor_product_views(self, primary_key):
+        vendor_product = self.get_queryset().filter(product_id=primary_key)
+        vendor_product.update(number_of_views=F('number_of_views') + 1)
+        # try:
+        #     my_object = self.get_queryset().get(product_id=primary_key)
+        #     my_object.number_of_views = my_object.number_of_views + 1
+        #     my_object.save()
+        # except my_models.VendorProduct.DoesNotExist:
+        #     print("user is not a vendor!")
+
+
+class CrawlerProductProcessor(models.Manager):
+
+    @classmethod
+    def process(cls, data):
+        category = cls.create_or_get_category(data['category_name'])
+        brand = cls.create_or_get_brand(data['brand'], category)
         product_info = {
             'id': data['id'],
             'title': data['name'],
             'brand': brand,
             'category': category,
         }
-        product = ProcessManager.create_or_get_product(product_info)
-        vendor = self.create_or_get_vendor(data['vendor'])
-        ProcessManager.create_or_get_vendor_product(product, vendor, data)
+        product = cls.create_or_get_product(product_info)
+        vendor = cls.create_or_get_vendor(data['vendor'])
+        cls.create_or_get_vendor_product(product, vendor, data)
 
     @classmethod
     def create_or_get_brand(cls, brand_name, brand_category):

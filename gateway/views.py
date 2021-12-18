@@ -26,7 +26,7 @@ class CrawlerHandler(viewsets.ViewSet):
     def create(self, request):
         """ViewSet class automatically sends post requests to this function here i redirect to managers.py"""
         if 'vendor' in request.data:
-            ProcessManager.process(data=request.data, self=ProcessManager())
+            CrawlerProductProcessor.process(data=request.data)
             return Response(status=200)
         else:
             serialized = CategorySerializer(data=request.data)
