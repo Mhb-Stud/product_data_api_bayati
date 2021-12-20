@@ -129,6 +129,7 @@ class CrawlerProductProcessor(models.Manager):
         default = {
             'base_price': other_info['base_price'],
             'price': other_info['price'],
+            'id': other_info['id'],
         }
         my_models.VendorProduct.objects.get_or_create(product=product, vendor=vendor, defaults=default)
 

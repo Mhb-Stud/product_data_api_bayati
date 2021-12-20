@@ -84,15 +84,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#                'rest_framework.authentication.TokenAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': (
-#                 'rest_framework.permissions.IsAuthenticated',
-#     ),
-#
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+                'rest_framework.renderers.JSONRenderer',
+                'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+                'rest_framework.parsers.JSONParser',
+                'rest_framework.parsers.FormParser',
+                'rest_framework.parsers.MultiPartParser',
+    ),
+
+}
 
 DATABASES = {
     'default': {
@@ -154,17 +157,37 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGGING = {
     'version': 1,
+    'root': {
+        'level': 'INFO',
+        'handlers': ['all_file']
+    },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG'
+            'handlers': ['django_file', 'console'],
+            'level': 'INFO'
+        }
+    },
+    'formatters': {
+        'standard_format': {
+            'format': '[{funcName} : {lineno:d}] {message}',
+            'style': '{',
         }
     },
     'handlers': {
-        'file': {
+        'all_file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './logs/debug.log'
+            'filename': './logs/all.info.log',
+            'formatter': 'standard_format'
+        },
+        'django_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/django.info.log',
+            'formatter': 'standard_format'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
         }
     }
 
