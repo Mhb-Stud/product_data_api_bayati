@@ -34,10 +34,12 @@ class RegisterView(viewsets.ViewSet):
 
 
 class PhotoUpload(viewsets.ViewSet):
+    """takes user's photo urls and applies the vendor pictures as soon as possible"""
     authentication_classes = [JWTAuthentication, ]
     permission_classes = [IsAuthenticated, ]
 
     def create(self, request):
+        """it passes the photo url to scrapy then scrapy will download the picture for us"""
         download_vendor_photo.delay(request.data['image_url'], request.user.username)
         return Response({"massage": 'the photo will be applied to your profile as soon as possible!'})
 
