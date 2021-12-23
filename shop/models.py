@@ -57,7 +57,7 @@ class Product(models.Model):
     it's vendor in the database
     """
     id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100, unique=True)
     picture = models.ImageField(blank=True, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)

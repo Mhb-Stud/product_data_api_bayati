@@ -110,7 +110,11 @@ class CrawlerProductProcessor(models.Manager):
 
     @classmethod
     def create_or_get_brand(cls, brand_name, brand_category):
-        brand, created = my_models.Brand.objects.get_or_create(name=brand_name, category=brand_category)
+        brand = None
+        try:
+            brand, created = my_models.Brand.objects.get_or_create(name=brand_name, defaults={'category': brand_category})
+        except my_models.Brand.DoesNotExist:
+            print("created brand!")
         return brand
 
     @staticmethod
@@ -135,7 +139,16 @@ class CrawlerProductProcessor(models.Manager):
 
     @staticmethod
     def create_or_get_product(data):
-        product, created = my_models.Product.objects.get_or_create(id=data['id'], title=data['title'], brand=data['brand'], category=data['category'])
+        product = None
+        try:
+            default = {
+                'category': data['category'],
+                'brand': data['brand'],
+                'id': data['id'],
+            }
+            product, created = my_models.Product.objects.get_or_create(id=data['id'], title=data['title'], defaults=default)
+        except my_models.Product.DoesNotExist:
+            print('product created!')
         return product
 
     @classmethod
