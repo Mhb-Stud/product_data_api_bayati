@@ -37,6 +37,7 @@ class Category(models.Model):
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=100, unique=True)
+    logo = models.ImageField(blank=True, null=True)
     super_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     objects = CategoryManager()
 
