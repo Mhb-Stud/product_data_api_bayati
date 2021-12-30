@@ -11,9 +11,9 @@ class Command(BaseCommand):
     help = 'Displays current time'
 
     def handle(self, *args, **kwargs):
-        self.get_category_image_files()
+        self.read_vendor_images_and_save()
 
-    def get_category_image_files(self):
+    def read_vendor_images_and_save(self):
         folder_path = os.path.join(BASE_DIR, 'media/vendor_logos')
         image_paths = [os.path.join(folder_path, name) for name in os.listdir(folder_path)]
         for path in image_paths:
